@@ -100,6 +100,20 @@ public class BotEntity extends PathfinderMob {
         @Override
         public void tick() {
             BlockPos base = bot.blockPosition();
+            // First, level the area: clear 7x7 area around base, y=0 to 5
+            for (int x = -3; x <= 3; x++) {
+                for (int z = -3; z <= 3; z++) {
+                    for (int y = 0; y <= 5; y++) {
+                        BlockPos pos = base.offset(x, y, z);
+                        if (!bot.level().getBlockState(pos).isAir()) {
+                            bot.level().destroyBlock(pos, true);
+                        }
+                    }
+                    // Place dirt at y=0 for flat ground
+                    BlockPos groundPos = base.offset(x, 0, z);
+                    bot.level().setBlock(groundPos, Blocks.DIRT.defaultBlockState(), 3);
+                }
+            }
             // Build a small house: 5x5 base, 3 high walls, roof
             // Floor
             for (int x = -2; x <= 2; x++) {
