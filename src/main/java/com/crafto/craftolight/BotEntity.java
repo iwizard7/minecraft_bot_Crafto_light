@@ -100,9 +100,9 @@ public class BotEntity extends PathfinderMob {
         @Override
         public void tick() {
             BlockPos base = bot.blockPosition();
-            // First, level the area: clear 7x7 area around base, y=0 to 5
-            for (int x = -3; x <= 3; x++) {
-                for (int z = -3; z <= 3; z++) {
+            // First, level the area: clear 11x11 area around base, y=0 to 5
+            for (int x = -5; x <= 5; x++) {
+                for (int z = -5; z <= 5; z++) {
                     for (int y = 0; y <= 5; y++) {
                         BlockPos pos = base.offset(x, y, z);
                         if (!bot.level().getBlockState(pos).isAir()) {
@@ -114,10 +114,10 @@ public class BotEntity extends PathfinderMob {
                     bot.level().setBlock(groundPos, Blocks.DIRT.defaultBlockState(), 3);
                 }
             }
-            // Build a small house: 5x5 base, 3 high walls, roof
+            // Build a house: 9x9 base, 3 high walls, roof
             // Floor
-            for (int x = -2; x <= 2; x++) {
-                for (int z = -2; z <= 2; z++) {
+            for (int x = -4; x <= 4; x++) {
+                for (int z = -4; z <= 4; z++) {
                     BlockPos pos = base.offset(x, 0, z);
                     if (bot.level().getBlockState(pos).isAir()) {
                         bot.level().setBlock(pos, Blocks.OAK_PLANKS.defaultBlockState(), 3);
@@ -126,14 +126,14 @@ public class BotEntity extends PathfinderMob {
             }
             // Walls
             for (int y = 1; y <= 3; y++) {
-                for (int x = -2; x <= 2; x++) {
-                    for (int z = -2; z <= 2; z++) {
-                        if (x == 0 && z == -2 && y <= 2) continue; // door
-                        if (Math.abs(x) == 2 || Math.abs(z) == 2) {
+                for (int x = -4; x <= 4; x++) {
+                    for (int z = -4; z <= 4; z++) {
+                        if (x == 0 && z == -4 && y <= 2) continue; // door opening
+                        if (Math.abs(x) == 4 || Math.abs(z) == 4) {
                             BlockPos pos = base.offset(x, y, z);
                             if (bot.level().getBlockState(pos).isAir()) {
                                 // Add windows (glass) in the middle of walls at y=2
-                                if (y == 2 && ((Math.abs(x) == 2 && z == 0) || (Math.abs(z) == 2 && x == 0))) {
+                                if (y == 2 && x == 0 && (z == -3 || z == 3) || z == 0 && (x == -3 || x == 3)) {
                                     bot.level().setBlock(pos, Blocks.GLASS_PANE.defaultBlockState(), 3);
                                 } else {
                                     bot.level().setBlock(pos, Blocks.OAK_PLANKS.defaultBlockState(), 3);
@@ -144,8 +144,8 @@ public class BotEntity extends PathfinderMob {
                 }
             }
             // Roof
-            for (int x = -2; x <= 2; x++) {
-                for (int z = -2; z <= 2; z++) {
+            for (int x = -4; x <= 4; x++) {
+                for (int z = -4; z <= 4; z++) {
                     BlockPos pos = base.offset(x, 4, z);
                     if (bot.level().getBlockState(pos).isAir()) {
                         bot.level().setBlock(pos, Blocks.OAK_PLANKS.defaultBlockState(), 3);
